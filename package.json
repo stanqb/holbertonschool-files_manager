@@ -2,22 +2,41 @@
   "name": "files_manager",
   "version": "1.0.0",
   "description": "Files manager - Holberton School back-end project",
-  "type": "module",
   "main": "server.js",
   "scripts": {
-    "start-server": "nodemon server.js",
-    "start-worker": "nodemon worker.js",
-    "dev": "node",
+    "start-server": "nodemon --exec babel-node -- server.js",
+    "start-worker": "nodemon --exec babel-node -- worker.js",
+    "dev": "nodemon --exec babel-node --",
+    "test": "./node_modules/.bin/mocha --require @babel/register --exit",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "redis": "^4.6.13"
+    "bull": "^3.16.0",
+    "chai-http": "^4.3.0",
+    "express": "^4.17.1",
+    "image-thumbnail": "^1.0.10",
+    "mime-types": "^2.1.27",
+    "mongodb": "^3.5.9",
+    "redis": "^2.8.0",
+    "sha1": "^1.1.1",
+    "uuid": "^8.3.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.0",
-    "eslint": "^8.57.0"
+    "@babel/cli": "^7.8.0",
+    "@babel/core": "^7.8.0",
+    "@babel/node": "^7.8.0",
+    "@babel/preset-env": "^7.8.2",
+    "@babel/register": "^7.8.0",
+    "chai": "^4.2.0",
+    "eslint": "^6.4.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "mocha": "^6.2.2",
+    "nodemon": "^2.0.2",
+    "request": "^2.88.0",
+    "sinon": "^7.5.0"
   }
 }
