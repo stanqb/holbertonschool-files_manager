@@ -1,4 +1,6 @@
+// eslint-disable-next-line import/extensions
 import redisClient from '../utils/redis.mjs';
+// eslint-disable-next-line import/extensions
 import dbClient from '../utils/db.mjs';
 
 class AppController {
