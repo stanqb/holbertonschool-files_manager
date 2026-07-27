@@ -1,12 +1,8 @@
 import express from 'express';
-// eslint-disable-next-line import/extensions
-import AppController from '../controllers/AppController.js';
-// eslint-disable-next-line import/extensions
-import UsersController from '../controllers/UsersController.js';
-// eslint-disable-next-line import/extensions
-import AuthController from '../controllers/AuthController.js';
-// eslint-disable-next-line import/extensions
-import FilesController from '../controllers/FilesController.js';
+import AppController from '../controllers/AppController';
+import UsersController from '../controllers/UsersController';
+import AuthController from '../controllers/AuthController';
+import FilesController from '../controllers/FilesController';
 
 const router = express.Router();
 
@@ -21,5 +17,6 @@ router.get('/files/:id', FilesController.getShow);
 router.get('/files', FilesController.getIndex);
 router.put('/files/:id/publish', FilesController.putPublish);
 router.put('/files/:id/unpublish', FilesController.putUnpublish);
+router.get('/files/:id/data', FilesController.getFile);
 
 export default router;

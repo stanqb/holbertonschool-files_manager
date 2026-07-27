@@ -1,11 +1,9 @@
-// eslint-disable-next-line import/extensions
-import redisClient from '../utils/redis.mjs';
-// eslint-disable-next-line import/extensions
-import dbClient from '../utils/db.mjs';
+import redisClient from '../utils/redis';
+import dbClient from '../utils/db';
 
-class AppController {
+export default class AppController {
   static getStatus(req, res) {
-    res.status(200).json({
+    return res.status(200).json({
       redis: redisClient.isAlive(),
       db: dbClient.isAlive(),
     });
@@ -14,8 +12,6 @@ class AppController {
   static async getStats(req, res) {
     const users = await dbClient.nbUsers();
     const files = await dbClient.nbFiles();
-    res.status(200).json({ users, files });
+    return res.status(200).json({ users, files });
   }
 }
-
-export default AppController;

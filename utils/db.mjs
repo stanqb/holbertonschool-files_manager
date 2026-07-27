@@ -2,28 +2,28 @@ import pkg from 'mongodb';
 
 const { MongoClient } = pkg;
 
-const DB_HOST = process.env.DB_HOST || 'localhost';
-const DB_PORT = process.env.DB_PORT || 27017;
-const DB_DATABASE = process.env.DB_DATABASE || 'files_manager';
-const url = `mongodb://${DB_HOST}:${DB_PORT}`;
-
 class DBClient {
   constructor() {
-    this.connected = false;
-    this.client = new MongoClient(url, { useUnifiedTopology: true });
+    const host = process.env.DB_HOST || 'localhost';
+    const port = process.env.DB_PORT || 27017;
+    const database = process.env.DB_DATABASE || 'files_manager';
+    const url = `mongodb://${host}:${port}`;
 
-    this.client.connect()
-      .then(() => {
-        this.db = this.client.db(DB_DATABASE);
-        this.connected = true;
-      })
-      .catch((err) => {
-        console.error(`MongoDB connection error: ${err}`);
-      });
+    this.status = false;
+    const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
+
+    client.connect((error) => {
+      if (error) {
+        this.status = false;
+      } else {
+        this.status = true;
+        this.db = client.db(database);
+      }
+    });
   }
 
   isAlive() {
-    return this.connected;
+    return this.status;
   }
 
   async nbUsers() {

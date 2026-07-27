@@ -1,29 +1,15 @@
 import express from 'express';
-// eslint-disable-next-line import/extensions
-import router from './routes/index.js';
-// eslint-disable-next-line import/extensions
-import dbClient from './utils/db.mjs';
+import router from './routes/index';
 
 const app = express();
 const port = process.env.PORT || 5000;
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use('/', router);
 
-const waitForDB = () => new Promise((resolve) => {
-  const check = () => {
-    if (dbClient.isAlive()) {
-      resolve();
-    } else {
-      setTimeout(check, 100);
-    }
-  };
-  check();
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
 });
 
-(async () => {
-  await waitForDB();
-  app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-  });
-})();
+export default app;
