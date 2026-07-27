@@ -5,6 +5,10 @@ import dbClient from '../utils/db';
 
 const fs = require('fs');
 const { ObjectId } = require('mongodb');
+const Bull = require('bull');
+
+const fileQueue = new Bull('fileQueue');
+const VALID_SIZES = ['500', '250', '100'];
 
 export default class FilesController {
   static async postUpload(req, res) {
@@ -77,6 +81,10 @@ export default class FilesController {
         parentId,
         localPath,
       });
+
+      if (type === 'image') {
+        fileQueue.add({ userId, fileId: newFile.insertedId });
+      }
     }
 
     return res.status(201).json({
@@ -195,6 +203,7 @@ export default class FilesController {
 
   static async getFile(req, res) {
     const { id } = req.params;
+    const { size } = req.query;
     const filesCollection = dbClient.db.collection('files');
     const file = await filesCollection.findOne({ _id: ObjectId(id) });
 
@@ -214,13 +223,19 @@ export default class FilesController {
       return res.status(400).json({ error: 'A folder doesn\'t have content' });
     }
 
-    if (!fs.existsSync(file.localPath)) {
+    let filePath = file.localPath;
+
+    if (size && VALID_SIZES.includes(String(size))) {
+      filePath = `${file.localPath}_${size}`;
+    }
+
+    if (!fs.existsSync(filePath)) {
       return res.status(404).json({ error: 'Not found' });
     }
 
     const mimeType = mime.lookup(file.name);
     res.setHeader('Content-Type', mimeType || 'text/plain');
 
-    return res.status(200).sendFile(file.localPath);
+    return res.status(200).sendFile(filePath);
   }
 }
